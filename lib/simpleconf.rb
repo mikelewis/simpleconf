@@ -1,0 +1,3 @@
+module Simpleconf
+  # Your code goes here...
+end
