@@ -33,7 +33,8 @@ describe SimpleConf do
   end
 
   it "should of created a recursive merge for hash" do
-    Hash.instance_methods.should include(:rmerge!)
+    meth_name = RUBY_VERSION < "1.9" ? "rmerge!" : :rmerge!
+    Hash.instance_methods.should include(meth_name)
   end
 
   it "should create a Kernel method that works" do
