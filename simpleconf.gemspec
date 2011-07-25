@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Mike Lewis"]
   s.email       = ["ft.mikelewis@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/mikelewis/simpleconf"
   s.summary     = %q{Simple Configuration DSL that supports merging, locking and more.}
   s.description = %q{Simple Configuration DSL that supports merging, locking and more.}
 
