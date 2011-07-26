@@ -175,6 +175,21 @@ describe SimpleConf do
       c.a.b.c.d.should == 5
     end
 
+    it "should be able to access the nested namespace" do
+      c = SimpleConf {
+        server {
+          host "localhost"
+          port 80
+        }
+      }
+
+      lambda { c.server }.should_not raise_error
+      c.server.should be_an_instance_of(SimpleConf::Conf)
+      p c.server
+      c.server.host.should == "localhost"
+      c.server.port.should == 80
+    end
+
     it "should allow for editable config elems within nests" do
       c = SimpleConf {
         a {
