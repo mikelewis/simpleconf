@@ -13,7 +13,17 @@ module SimpleConf
     c
   end
 
-  module_function :build
+  def build_from_string(instance_str, opts={})
+    c = Conf.new(instance_str, opts)
+    c.instance_eval(instance_str)
+    c.__init_only__ = true if opts[:init_only]
+    c
+  end
+
+  def load(file_name, opts={})
+    build_from_string(File.read(file_name), opts)
+  end
+
+  module_function :build, :build_from_string, :load
 
 end
-

@@ -28,6 +28,75 @@ describe SimpleConf do
     end
   end
 
+  context "#build_from_string" do
+    before do
+      @str = <<-EOS
+        server "localhost", :override => false
+        port 80
+        auth {
+          user "mike"
+          password "mypass"
+        }
+      EOS
+    end
+
+    it "should create a SimpleConf::Conf from a valid string conf" do
+      c = SimpleConf.build_from_string(@str)
+
+      c.should be_an_instance_of(SimpleConf::Conf)
+      c.server.should == "localhost"
+      c.port.should == 80
+      c.auth.should be_an_instance_of(SimpleConf::Conf)
+      c.auth.user.should == "mike"
+      c.auth.password.should == "mypass"
+    end
+
+    it "should create a SimpleConf::Conf that uses ovveride" do
+      c = SimpleConf.build_from_string(@str)
+
+      c.server "boo"
+      c.server.should == "localhost"
+    end
+
+    it "should create a SimpleConf::Conf that uses init_only" do
+      c = SimpleConf.build_from_string(@str, :init_only => true)
+
+      lambda { c.boooo("yeaa") }.should raise_error
+    end
+  end
+
+  context "#load" do
+    before do
+      @file_name = "./spec/files/conf"
+    end
+
+    it "should create a SimpleConf::Conf from a valid string conf" do
+      c = SimpleConf.load(@file_name)
+
+      c.should be_an_instance_of(SimpleConf::Conf)
+      c.server.should == "localhost"
+      c.port.should == 80
+      c.auth.should be_an_instance_of(SimpleConf::Conf)
+      c.auth.user.should == "mike"
+      c.auth.password.should == "mypass"
+    end
+
+    it "should create a SimpleConf::Conf that uses ovveride" do
+      c = SimpleConf.load(@file_name)
+
+      c.server "boo"
+      c.server.should == "localhost"
+    end
+
+    it "should create a SimpleConf::Conf that uses init_only" do
+      c = SimpleConf.load(@file_name, :init_only => true)
+
+      lambda { c.boooo("yeaa") }.should raise_error
+    end
+
+
+  end
+
   it "should create a Kernel method SimpleConf" do
     Kernel.should respond_to(:SimpleConf)
   end
@@ -77,16 +146,16 @@ describe SimpleConf do
 
   context "Blank Slate" do
     it "should remove all methods and allow user to do whatever he wants " do
-      
-    c = SimpleConf {
-      id 5
-      hash 20
-      freeze "boo"
-    }
 
-    c.id.should == 5
-    c.hash.should == 20
-    c.freeze.should == "boo"
+      c = SimpleConf {
+        id 5
+        hash 20
+        freeze "boo"
+      }
+
+      c.id.should == 5
+      c.hash.should == 20
+      c.freeze.should == "boo"
     end
 
   end
@@ -107,7 +176,7 @@ describe SimpleConf do
       }
 
       lambda {
-      c.port "boooo"
+        c.port "boooo"
       }.should raise_error
     end
 

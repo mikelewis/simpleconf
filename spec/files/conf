@@ -1,0 +1,6 @@
+server "localhost", :override => false
+port 80
+auth {
+  user "mike"
+  password "mypass"
+}

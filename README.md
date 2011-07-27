@@ -80,5 +80,24 @@ Needed a simple configuration library for my gems. Made public so everyone can t
 
     default.port 80 #throws error!!!
 
+  **File Configuration**
+
+    # basic.conf
+
+    server "localhost"
+    ports [80, 8080, 3000]
+    auth {
+      user "mike"
+      pass "password"
+    }
+
+    # code.rb
+
+    conf = SimpleConf.load("basic.conf")
+    conf.server # localhost
+    conf.ports # [80, 8080, 3000]
+    conf.auth.user # mike
+    # etc
+
 
   To see all examples/cases, see the spec file.
