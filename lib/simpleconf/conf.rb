@@ -35,7 +35,12 @@ module SimpleConf
       fail "Other needs to be a SimpleConf::Conf" unless other.is_a? Conf
       check_and_change_overrides(other)
       self.__init_only__ = other.__init_only__
-      self.instance_eval(&other.__instance_block__)
+      if other.__instance_block__.is_a?(Proc)
+        self.instance_eval(&other.__instance_block__)
+      else
+        self.instance_eval(other.__instance_block__)
+      end
+
       __vars__.rmerge!(other.__vars__)
       nil
     end

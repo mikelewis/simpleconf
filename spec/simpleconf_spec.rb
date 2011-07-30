@@ -394,6 +394,40 @@ describe SimpleConf do
       @default.tree.ants.home.sq_feet.should == 5000
     end
 
+    it "should merge! a SimpleConf::Conf generated from a string" do
+      str = <<-EOS
+        port 90
+        socket "haha"
+        tree {
+          leafs 60, :override => false
+          bugs true
+          ants {
+            fast false
+            home {
+              big true
+              sq_feet 5000
+            }
+          }
+        }
+
+      EOS
+      @new = SimpleConf.build_from_string(str)
+
+      @default.merge!(@new)
+
+      @default.should be_an_instance_of(SimpleConf::Conf)
+
+      @default.server.should == "localhost"
+      @default.port.should == 90
+      @default.socket.should == "haha"
+      @default.tree.bugs.should == true
+      @default.tree.leafs.should == 60
+      @default.tree.height.should == 50
+      @default.tree.ants.big.should == false
+      @default.tree.ants.home.sq_feet.should == 5000
+
+    end
+
     it "should merge a SimpleConf::Conf" do
 
       new_conf = @default.merge(@new)
